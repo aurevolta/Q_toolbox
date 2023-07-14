@@ -1,0 +1,604 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Quaternion demo</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-05-19"><meta name="DC.source" content="quat_demo.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Quaternion demo</h1><!--introduction--><p>The use of quaternion related function of this toolbox will be covered in this demo</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">The null quaternion</a></li><li><a href="#8">The random quaternion</a></li><li><a href="#11">Generating quaternions</a></li><li><a href="#17">Inverting a rotation</a></li><li><a href="#20">Quaternion multiplication</a></li><li><a href="#25">Quaternion division</a></li><li><a href="#32">Unitary condition</a></li><li><a href="#34">Minimal representation</a></li></ul></div><h2>The null quaternion<a name="1"></a></h2><p>First of all let us familiarize with quaternions by generating the null rotation quaternion and assigning it to a variable <b>q0</b></p><pre class="codeinput">q0 = zq
+</pre><p>the value of the null quaternion is:</p><pre class="codeoutput">
+q0 =
+
+     0
+     0
+     0
+     1
+
+</pre><p>we can now compute the direction cosine matrix <b>R</b> and verify that the result is the identity</p><pre class="codeinput">R = q2dcm(q0)
+</pre><pre class="codeoutput">
+R =
+
+     1     0     0
+     0     1     0
+     0     0     1
+
+</pre><p>Since quaternion represents a parametrization of SO(3) but have 4 elements, some ambiguities arise. A quaternion and its negative represents still the same attitude. In fact</p><pre class="codeinput">q2dcm(-q0)
+</pre><pre class="codeoutput">
+ans =
+
+     1     0     0
+     0     1     0
+     0     0     1
+
+</pre><p>This is due to the above mentioned ambiguities. In  order to represent SO(3) the four element quaternion has to obey a simple rule: it must be of unitary length. In fact</p><pre class="codeinput">norm(q0)
+</pre><p>gives a unitary response.</p><pre class="codeoutput">
+ans =
+
+     1
+
+</pre><p>And this is valid for all quaternions representing attitude. Moreover, the identity quaternion has the property of being equal to its conjugate. As a matter of fact this is true for any identity elements of a particular group (see group theory).</p><h2>The random quaternion<a name="8"></a></h2><p>another useful function to familiarize with quaternions and quaternion functions is the random quaternion. The function generates a random quaternion <b>q</b> with unitary length.</p><pre class="codeinput">q = randq
+</pre><pre class="codeoutput">
+q =
+
+   -0.5541
+   -0.5016
+    0.3204
+    0.5819
+
+</pre><p>We can check the norm of the quaternion as before</p><pre class="codeinput">norm(q)
+</pre><pre class="codeoutput">
+ans =
+
+    1.0000
+
+</pre><p>and of course test that the DCM is equal for both <b>q</b> and <b>-q</b></p><pre class="codeinput">R = q2dcm(q)
+R == q2dcm(-q)
+</pre><pre class="codeoutput">
+R =
+
+    0.2914    0.9289    0.2287
+    0.1830    0.1805   -0.9664
+   -0.9390    0.3234   -0.1173
+
+
+ans =
+
+     1     1     1
+     1     1     1
+     1     1     1
+
+</pre><h2>Generating quaternions<a name="11"></a></h2><p>Another way to generate quaternion is using the <i>q_gen</i> function. Let us generate a quaternion that represents a 90 degrees rotation around the <i>x</i> axis.</p><pre class="codeinput">q = q_gen(<span class="string">'x'</span>,90*pi/180)
+</pre><pre class="codeoutput">
+q =
+
+    0.7071
+         0
+         0
+    0.7071
+
+</pre><p>Then its DCM is given by</p><pre class="codeinput">q2dcm(q)
+</pre><pre class="codeoutput">
+ans =
+
+    1.0000         0         0
+         0    0.0000    1.0000
+         0   -1.0000    0.0000
+
+</pre><p>The same results can be obtained by using</p><pre class="codeinput">q = q_gen([1;0;0],90*pi/180);
+q2dcm(q)
+</pre><pre class="codeoutput">
+ans =
+
+    1.0000         0         0
+         0    0.0000    1.0000
+         0   -1.0000    0.0000
+
+</pre><p>Since the function <i>q_gen</i> permits to generate the quaternions also using a generic vector direction. The functions allows to construct quaternions by subsequent rotations, fore example:</p><pre class="codeinput">q = q_gen(<span class="string">'xy'</span>,[45,65]*pi/180)
+</pre><pre class="codeoutput">
+q =
+
+    0.3228
+    0.4964
+    0.2056
+    0.7792
+
+</pre><p>This is the equivalent of a rotation around the <i>x</i> axis followed by a rotation on the <i>y</i> axis. The resulting DCM is</p><pre class="codeinput">R = q2dcm(q)
+</pre><pre class="codeoutput">
+R =
+
+    0.4226    0.6409   -0.6409
+         0    0.7071    0.7071
+    0.9063   -0.2988    0.2988
+
+</pre><p>and is equal of</p><pre class="codeinput">qx = q_gen(<span class="string">'x'</span>,45*pi/180);
+qy = q_gen(<span class="string">'y'</span>,65*pi/180);
+Rx = q2dcm(qx);
+Ry = q2dcm(qy);
+R = Ry*Rx
+</pre><pre class="codeoutput">
+R =
+
+    0.4226    0.6409   -0.6409
+         0    0.7071    0.7071
+    0.9063   -0.2988    0.2988
+
+</pre><h2>Inverting a rotation<a name="17"></a></h2><p>It is common to rotate around axes to generate a DCM. Sometimes rotations have to be reversed and it is equivalent of inverting the DCM. The DCM has the interesting property of being orthonormal, thus the following rules applies:  <img src="quat_demo_eq15807777413547425986.png" alt="$\mathbf{R}^{-1}=\mathbf{R}^{T}$">. It is also equivalent to apply rotation in an inverted order and sign.</p><pre class="codeinput">qi = q_gen(<span class="string">'yx'</span>,-[65,45]*pi/180);
+[R',q2dcm(qi)]
+</pre><pre class="codeoutput">
+ans =
+
+    0.4226         0    0.9063    0.4226         0    0.9063
+    0.6409    0.7071   -0.2988    0.6409    0.7071   -0.2988
+   -0.6409    0.7071    0.2988   -0.6409    0.7071    0.2988
+
+</pre><p>but what is the relation between <b>q</b> and <b>qi</b> ?</p><pre class="codeinput">[q,qi]
+</pre><pre class="codeoutput">
+ans =
+
+    0.3228   -0.3228
+    0.4964   -0.4964
+    0.2056   -0.2056
+    0.7792    0.7792
+
+</pre><p>It's easy to see that the vector component of the quaternion <b>qi</b> is opposite in sign of the quaternion <b>q</b>. The inversion of rotation is a pretty easy operation in terms of quaternions and is usually called <i>conjugate</i> The quaternion conjugate of a quaternion is a quaternion with inverted vector part and constant scalar part. The function <i>qconj</i> is used for this purpose.</p><pre class="codeinput">qi = qconj(q)
+</pre><pre class="codeoutput">
+qi =
+
+   -0.3228
+   -0.4964
+   -0.2056
+    0.7792
+
+</pre><h2>Quaternion multiplication<a name="20"></a></h2><p>The operation of consequent rotation is non other than a quaternion multiplication. The unitary quaternion group is closed with respect to the multiplication operation since the product of two quaternions gives another quaternions. The unitarity conditions is respected during the quaternion multiplication process. The multiplication is formally written as:</p><p><img src="quat_demo_eq09245797785595715646.png" alt="$\mathbf{q}_{c}=\mathbf{q}_{a}\otimes\mathbf{q}_{b}$"></p><p>can be written in matrix form as</p><p><img src="quat_demo_eq18350267582149406287.png" alt="$\mathbf{q}_{c}=\left[\mathbf{q}_{a}^{-}\right]\mathbf{q}_{b}$"></p><p>Where <img src="quat_demo_eq17916092050865848667.png" alt="$\;\left[\mathbf{q}_{a}^{-}\right]\;$"> is a special matrix representation of <img src="quat_demo_eq02453340457346817438.png" alt="$\mathbf{q}_{a}$">. Let us make use of the symbolic toolbox to visualize such operation</p><pre class="codeinput">qa = sym(<span class="string">'qa'</span>,[4,1],<span class="string">'real'</span>);
+qb = sym(<span class="string">'qb'</span>,[4,1],<span class="string">'real'</span>);
+
+crossqm(qa)
+</pre><pre class="codeoutput"> 
+ans =
+ 
+[  qa4,  qa3, -qa2, qa1]
+[ -qa3,  qa4,  qa1, qa2]
+[  qa2, -qa1,  qa4, qa3]
+[ -qa1, -qa2, -qa3, qa4]
+ 
+</pre><p>which is formed as the sum of a transposed cross matrix (the matrix form of a cross product) plus an identity matrix multiplied by the scalar part, all adjunt by the vector part and its opposite on the sides and the scalar part as final element.</p><pre class="codeinput">[crossmt(qa(1:3))+qa(4)*eye(3),qa(1:3)
+    -qa(1:3)',qa(4)]
+</pre><pre class="codeoutput"> 
+ans =
+ 
+[  qa4,  qa3, -qa2, qa1]
+[ -qa3,  qa4,  qa1, qa2]
+[  qa2, -qa1,  qa4, qa3]
+[ -qa1, -qa2, -qa3, qa4]
+ 
+</pre><p>Then let us verify that the function <i>crossqm</i> effectively describes the multiplication (i.e. rotation)</p><pre class="codeinput">qxy = crossqm(qy)*qx
+[q2dcm(qxy),R]
+</pre><pre class="codeoutput">
+qxy =
+
+    0.3228
+    0.4964
+    0.2056
+    0.7792
+
+
+ans =
+
+    0.4226    0.6409   -0.6409    0.4226    0.6409   -0.6409
+         0    0.7071    0.7071         0    0.7071    0.7071
+    0.9063   -0.2988    0.2988    0.9063   -0.2988    0.2988
+
+</pre><p>The function <i>crossqm</i> has a counterpart called <i>crossqp</i> and permits to obtain the same result.</p><pre class="codeinput">qxy = crossqp(qx)*qy
+</pre><pre class="codeoutput">
+qxy =
+
+    0.3228
+    0.4964
+    0.2056
+    0.7792
+
+</pre><p>This can be verified also using the symbolic variables</p><pre class="codeinput">crossqm(qa)*qb-crossqp(qb)*qa
+</pre><pre class="codeoutput"> 
+ans =
+ 
+ 0
+ 0
+ 0
+ 0
+ 
+</pre><h2>Quaternion division<a name="25"></a></h2><p>in the same way as a rotation can be reversed in terms of DCM, a multiplication of quaternions can be inverted, hence the division operation. Should be noted that since we are dealing with unitary quaternions, the inverse of <i>crossqm</i> and <i>crossqp</i> are merely the transpose.</p><pre class="codeinput">qc = crossqm(qa)*qb;
+qb_rev = simplify(crossqm(qa)'*qc);
+subs(qb_rev,qa'*qa,1)
+</pre><p>and the results is of course <b>qb</b></p><pre class="codeoutput"> 
+ans =
+ 
+ qb1
+ qb2
+ qb3
+ qb4
+ 
+</pre><p>As a matter of fact the transpose of <i>crossqp</i> and <i>crossqm</i> can be obtained by simply applying the conjugate operation</p><pre class="codeinput">crossqm(qa)'-crossqm(qconj(qa))
+</pre><pre class="codeoutput"> 
+ans =
+ 
+[ 0, 0, 0, 0]
+[ 0, 0, 0, 0]
+[ 0, 0, 0, 0]
+[ 0, 0, 0, 0]
+ 
+</pre><p>The same simmetry that exists for multiplication can be found also here in the division operation, in fact</p><pre class="codeinput">qb_rev = simplify(crossqmt(qc)*qa);
+subs(qb_rev,qa'*qa,1)
+</pre><p>is still equal to <b>qb</b></p><pre class="codeoutput"> 
+ans =
+ 
+ qb1
+ qb2
+ qb3
+ qb4
+ 
+</pre><p>hence we have that <i>crossqmt</i> and <i>crossqpt</i> are dual version of the transposes of <i>crossqm</i> and <i>crossqp</i> respectively.</p><pre class="codeinput">crossqmt(qc)*qa-crossqm(qa)'*qc
+</pre><pre class="codeoutput"> 
+ans =
+ 
+ 0
+ 0
+ 0
+ 0
+ 
+</pre><p>A characteristic of <i>crossqmt</i> and <i>crossqpt</i> is that the vector parts adjoint on the core [3x3] matrix are always positive, while the identity matrix multiplied by the scalar part is always negative.</p><pre class="codeinput">crossqpt(qa)
+</pre><pre class="codeoutput"> 
+ans =
+ 
+[ -qa4, -qa3,  qa2, qa1]
+[  qa3, -qa4, -qa1, qa2]
+[ -qa2,  qa1, -qa4, qa3]
+[  qa1,  qa2,  qa3, qa4]
+ 
+</pre><h2>Unitary condition<a name="32"></a></h2><p>As mentioned before an important issue for quaternions representing the attitude is the unitarity condition. Let us try that out</p><pre class="codeinput">q = randq;
+err_0 = 1-norm(q);
+err = zeros(1,100);
+
+<span class="keyword">for</span> i = 1 : 1000
+    q = crossqm(randq)*q;
+    err(i) = 1-norm(q);
+<span class="keyword">end</span>
+
+err = [err_0,err];
+
+figure
+plot(err)
+axis <span class="string">tight</span>, title <span class="string">'Accumulation error'</span>, ylabel <span class="string">'1-|q|'</span>
+snapnow;
+</pre><img vspace="5" hspace="5" src="quat_demo_01.png" alt=""> <p>Errors accumulate multiplication by multiplication, however the increase is very small and inherent to the truncation error.</p><h2>Minimal representation<a name="34"></a></h2><p>Quaternions are a 4 dimensional representation of SO(3). This has some implications and may lead to some ambiguities or singularities, like <i>unwinding</i> in quaternion based control. sometimes can be useful to convert a quaternion in its tridimensional representation and vice versa.</p><pre class="codeinput">q = randq;
+xi = q2minimal(q);
+
+[q2dcm(q),expm(crossm(xi))]
+</pre><pre class="codeoutput">
+ans =
+
+    0.1582    0.7293    0.6656    0.1582    0.7293    0.6656
+   -0.2627   -0.6187    0.7404   -0.2627   -0.6187    0.7404
+    0.9518   -0.2920    0.0937    0.9518   -0.2920    0.0937
+
+</pre><p>The function <i>q2minimal</i> permits to convert a quaternion into its minimal representatio. As seen above the matrix exponential mapping allows to retreive the DCM. The quaternion can then be recovered using the other mapping function</p><pre class="codeinput">[q,minimal2q(xi)]
+</pre><pre class="codeoutput">
+ans =
+
+    0.6487    0.6487
+    0.1798    0.1798
+    0.6233    0.6233
+    0.3979    0.3979
+
+</pre><p>What happens to the ambiguity in sign?</p><pre class="codeinput">[q2minimal(q),q2minimal(-q)]
+</pre><p>of course the minimal representation is not affected by the quaternion sign ambiguity.</p><pre class="codeoutput">
+ans =
+
+   -1.6426   -1.6426
+   -0.4554   -0.4554
+   -1.5785   -1.5785
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Quaternion demo
+% The use of quaternion related function of this toolbox will be covered in
+% this demo
+
+
+
+%% The null quaternion
+% First of all let us familiarize with quaternions by generating the null
+% rotation quaternion and assigning it to a variable *q0*
+q0 = zq 
+
+%%%
+% the value of the null quaternion is: 
+%% 
+% we can now compute the direction cosine matrix *R* and verify that the result
+% is the identity
+R = q2dcm(q0)
+
+%%
+% Since quaternion represents a parametrization of SO(3) but have 4
+% elements, some ambiguities arise. A quaternion and its negative
+% represents still the same attitude. In fact
+q2dcm(-q0)
+
+%% 
+% This is due to the above mentioned ambiguities. In  order to represent
+% SO(3) the four element quaternion has to obey a simple rule: it must be
+% of unitary length. In fact
+norm(q0)
+%%%
+% gives a unitary response. 
+%%
+% And this is valid for all quaternions
+% representing attitude. Moreover, the identity quaternion has the 
+% property of being equal to its conjugate. As a matter of fact this is 
+% true for any identity elements of a particular group (see group theory).
+
+%% The random quaternion
+% another useful function to familiarize with quaternions and quaternion
+% functions is the random quaternion. The function generates a random
+% quaternion *q* with unitary length. 
+q = randq
+
+%%
+% We can check the norm of the quaternion as before 
+norm(q)
+
+%%
+% and of course test that the DCM is equal for both *q* and *-q*
+R = q2dcm(q)
+R == q2dcm(-q)
+
+%% Generating quaternions
+% Another way to generate quaternion is using the _q_gen_ function. 
+% Let us generate a quaternion that represents a 90 degrees rotation around 
+% the _x_ axis.  
+q = q_gen('x',90*pi/180)
+
+%% 
+% Then its DCM is given by 
+q2dcm(q)
+
+%% 
+% The same results can be obtained by using 
+q = q_gen([1;0;0],90*pi/180);
+q2dcm(q)
+
+%%
+% Since the function _q_gen_ permits to generate the quaternions also using
+% a generic vector direction. The functions allows to construct quaternions
+% by subsequent rotations, fore example:
+q = q_gen('xy',[45,65]*pi/180)
+
+%%
+% This is the equivalent of a rotation around the _x_ axis followed by a
+% rotation on the _y_ axis. The resulting DCM is 
+R = q2dcm(q)
+%%
+% and is equal of 
+qx = q_gen('x',45*pi/180);
+qy = q_gen('y',65*pi/180);
+Rx = q2dcm(qx);
+Ry = q2dcm(qy);
+R = Ry*Rx
+
+%% Inverting a rotation
+% It is common to rotate around axes to generate a DCM. Sometimes rotations
+% have to be reversed and it is equivalent of inverting the DCM. The DCM 
+% has the interesting property of being orthonormal, thus the following
+% rules applies:  $\mathbf{R}^{-1}=\mathbf{R}^{T}$. It is also equivalent
+% to apply rotation in an inverted order and sign. 
+
+qi = q_gen('yx',-[65,45]*pi/180);
+[R',q2dcm(qi)]
+%% 
+% but what is the relation between *q* and *qi* ? 
+[q,qi]
+%%
+% It's easy to see that the vector component of the quaternion *qi* is
+% opposite in sign of the quaternion *q*. The inversion of rotation is a 
+% pretty easy operation in terms of quaternions and is usually called 
+% _conjugate_
+% The quaternion conjugate of a quaternion is a quaternion with inverted
+% vector part and constant scalar part. The function _qconj_ is used for
+% this purpose. 
+qi = qconj(q)
+
+%% Quaternion multiplication
+% The operation of consequent rotation is non other than a quaternion
+% multiplication. The unitary quaternion group is closed with respect to
+% the multiplication operation since the product of two quaternions gives
+% another quaternions. The unitarity conditions is respected during the
+% quaternion multiplication process. The multiplication is formally written
+% as:
+%
+% $\mathbf{q}_{c}=\mathbf{q}_{a}\otimes\mathbf{q}_{b}$ 
+%
+% can be written in matrix form as 
+%
+% $\mathbf{q}_{c}=\left[\mathbf{q}_{a}^{-}\right]\mathbf{q}_{b}$ 
+%
+% Where $\;\left[\mathbf{q}_{a}^{-}\right]\;$ is a special matrix
+% representation of $\mathbf{q}_{a}$. Let us make use of the symbolic
+% toolbox to visualize such operation
+qa = sym('qa',[4,1],'real');
+qb = sym('qb',[4,1],'real');
+
+crossqm(qa)
+
+%%
+% which is formed as the sum of a transposed cross matrix (the matrix form of a cross
+% product) plus an identity matrix multiplied by the scalar part, all
+% adjunt by the vector part and its opposite on the sides and the scalar
+% part as final element. 
+
+[crossmt(qa(1:3))+qa(4)*eye(3),qa(1:3)
+    -qa(1:3)',qa(4)]
+%%  
+% Then let us verify that the function _crossqm_ effectively describes the
+% multiplication (i.e. rotation)
+
+qxy = crossqm(qy)*qx
+[q2dcm(qxy),R]
+
+%%
+% The function _crossqm_ has a counterpart called _crossqp_ and permits to
+% obtain the same result.
+qxy = crossqp(qx)*qy
+
+%%
+% This can be verified also using the symbolic variables
+crossqm(qa)*qb-crossqp(qb)*qa
+
+%% Quaternion division
+% in the same way as a rotation can be reversed in terms of DCM, a
+% multiplication of quaternions can be inverted, hence the division
+% operation. Should be noted that since we are dealing with unitary
+% quaternions, the inverse of _crossqm_ and _crossqp_ are merely the
+% transpose. 
+qc = crossqm(qa)*qb;
+qb_rev = simplify(crossqm(qa)'*qc);
+subs(qb_rev,qa'*qa,1)
+%%% 
+% and the results is of course *qb*
+%%
+% As a matter of fact the transpose of _crossqp_ and _crossqm_ can be 
+% obtained by simply applying the conjugate operation
+crossqm(qa)'-crossqm(qconj(qa))
+
+%%
+% The same simmetry that exists for multiplication can be found also here
+% in the division operation, in fact
+qb_rev = simplify(crossqmt(qc)*qa);
+subs(qb_rev,qa'*qa,1)
+%%% 
+% is still equal to *qb*
+
+%%
+% hence we have that _crossqmt_ and _crossqpt_ are dual version of the
+% transposes of _crossqm_ and _crossqp_ respectively. 
+crossqmt(qc)*qa-crossqm(qa)'*qc
+
+%%
+% A characteristic of _crossqmt_ and _crossqpt_ is that the vector parts
+% adjoint on the core [3x3] matrix are always positive, while the identity
+% matrix multiplied by the scalar part is always negative. 
+crossqpt(qa)
+
+%% Unitary condition
+% As mentioned before an important issue for quaternions representing the
+% attitude is the unitarity condition. Let us try that out
+q = randq; 
+err_0 = 1-norm(q);
+err = zeros(1,100);
+
+for i = 1 : 1000
+    q = crossqm(randq)*q;
+    err(i) = 1-norm(q);
+end
+
+err = [err_0,err];
+
+figure
+plot(err)
+axis tight, title 'Accumulation error', ylabel '1-|q|'
+snapnow;
+
+%%
+% Errors accumulate multiplication by multiplication, however the increase
+% is very small and inherent to the truncation error. 
+
+
+%% Minimal representation
+% Quaternions are a 4 dimensional representation of SO(3). This has some
+% implications and may lead to some ambiguities or singularities, like
+% _unwinding_ in quaternion based control. 
+% sometimes can be useful to convert a quaternion in its tridimensional
+% representation and vice versa. 
+q = randq; 
+xi = q2minimal(q);
+
+[q2dcm(q),expm(crossm(xi))]
+
+%%
+% The function _q2minimal_ permits to convert a quaternion into its minimal
+% representatio. As seen above the matrix exponential mapping allows to
+% retreive the DCM. The quaternion can then be recovered using the other
+% mapping function 
+
+[q,minimal2q(xi)]
+
+%%
+% What happens to the ambiguity in sign? 
+[q2minimal(q),q2minimal(-q)]
+%%%
+% of course the minimal representation is not affected by the quaternion
+% sign ambiguity. 
+
+
+
+##### SOURCE END #####
+--></body></html>
